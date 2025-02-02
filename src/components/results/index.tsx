@@ -57,8 +57,16 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
   }
 
   render() {
-    if (this.props.status === 'error') return <h1>Error</h1>;
-    if (this.props.status === 'loading') return <h1>Loading</h1>;
+    if (this.props.status === 'error')
+      return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
+    if (this.props.status === 'loading')
+      return (
+        <img
+          src="./loader.gif"
+          alt="Loading pokemons"
+          className="text-center mt-[5rem] max-w-[15rem] mx-auto"
+        />
+      );
     if (this.state.result == null) return null;
 
     const cards = Array.isArray(this.state.result) ? (
