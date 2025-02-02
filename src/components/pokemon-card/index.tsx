@@ -1,4 +1,3 @@
-import { POKEMON_API } from '@/config';
 import { IPokemon } from '@/types';
 import React from 'react';
 
@@ -22,27 +21,5 @@ export class PokemonCard extends React.Component<IPokemonCardProps> {
         <div>Weight: {weight}</div>
       </article>
     );
-  }
-}
-
-export class PokemonCardFetch extends React.Component<Pick<IPokemon, 'id'>> {
-  state = {
-    data: null,
-  };
-
-  componentDidMount() {
-    (async () => {
-      this.setState({ data: 'loading' });
-      const { id } = this.props;
-      const response = await fetch(`${POKEMON_API.API_SEARCH_URL}/${id}`);
-      if (!response.ok) return this.setState({ data: null });
-      const data = await response.json();
-      this.setState({ data });
-    })();
-  }
-
-  render() {
-    if (this.state.data === 'loading') return <i>Loading ${this.props.id}</i>;
-    return this.state.data && <pre>{this.state.data}</pre>;
   }
 }
