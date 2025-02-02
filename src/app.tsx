@@ -54,8 +54,8 @@ export class App extends Component {
 
   render() {
     return (
-      <>
-        <h1>API App</h1>
+      <section className="max-w-xl mx-auto">
+        <h1 className="text-[3rem] m-4 font-bold text-center">API App</h1>
         <ErrorButton />
         <TopControls
           searchQuery={this.state.searchQuery}
@@ -69,7 +69,7 @@ export class App extends Component {
           searchQuery={this.state.searchQuery}
           status={this.state.status}
         />
-      </>
+      </section>
     );
   }
 }
