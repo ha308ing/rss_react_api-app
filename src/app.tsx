@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Results, TopControls } from '@/components';
+import { ErrorButton } from './components/error-button';
 
 export interface IAppState {
   status: null | 'loading' | 'error';
@@ -54,6 +55,7 @@ export class App extends Component {
     return (
       <>
         <h1>API App</h1>
+        <ErrorButton />
         <TopControls
           searchQuery={this.state.searchQuery}
           changeSearchQuery={this.changeSearchQuery}
