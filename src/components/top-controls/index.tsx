@@ -16,7 +16,7 @@ export class TopControls extends React.Component<
 
   buttonClickEventHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.changeSearchQuery(this.props.searchInput);
+    this.props.changeSearchQuery(this.props.searchInput.trim());
     this.saveInputValueToLocalStorage();
   };
 
