@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Results, TopControls } from '@/components';
 import { ErrorButton } from './components/error-button';
+import './app.css';
 
 export interface IAppState {
   status: null | 'loading' | 'error';
