@@ -12,6 +12,13 @@ export class ErrorButton extends React.Component {
   render() {
     if (this.state.hasError) throw new Error('Trigger error button');
 
-    return <button onClick={this.clickHandler}>Throw Error</button>;
+    return (
+      <button
+        onClick={this.clickHandler}
+        className="text-sm bg-red-800 text-red-50 py-2 px-4 fixed bottom-3 right-4"
+      >
+        Throw Error
+      </button>
+    );
   }
 }
