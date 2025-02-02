@@ -2,7 +2,7 @@ import { IAppStateExtended } from '@/app';
 import React, { ChangeEvent, FormEvent } from 'react';
 
 const LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE = 'searchInputValue';
-const SEARCH_INPUT_PLACEHOLDER = 'Search';
+const SEARCH_INPUT_PLACEHOLDER = 'Enter pokemon name';
 const SEARCH_BUTTON_TEXT = 'Search';
 
 export class TopControls extends React.Component<
@@ -29,13 +29,17 @@ export class TopControls extends React.Component<
 
   render() {
     return (
-      <form onSubmit={this.buttonClickEventHandler}>
+      <form
+        onSubmit={this.buttonClickEventHandler}
+        className="flex justify-center"
+      >
         <input
+          className="p-2"
           value={this.props.searchInput}
           onChange={this.changeInputEventHandler}
           placeholder={SEARCH_INPUT_PLACEHOLDER}
         />
-        <button>
+        <button className="border-1 border-grey-50 px-4 py-2 rounded-sm hover:shadow-sm">
           {this.props.status === 'loading' ? 'loading' : SEARCH_BUTTON_TEXT}
         </button>
       </form>
