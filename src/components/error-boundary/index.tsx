@@ -18,9 +18,23 @@ export class ErrorBoundary extends React.Component<
     console.error(error, info.componentStack);
   }
 
+  reload = () => {
+    location.reload();
+  };
+
   render() {
     if (this.state.hasError) {
-      return <h1>App Crashed</h1>;
+      return (
+        <div className="absolute inset-0 flex flex-col items-center justify-center ">
+          <h1 className="text-[4rem] font-bold mb-3">App Crashed</h1>
+          <button
+            onClick={this.reload}
+            className="border-2 border-green-100 shadow-md shadow-green-500/50 px-4 py-2 bg-green-50 rounded-md"
+          >
+            Reload
+          </button>
+        </div>
+      );
     }
 
     return this.props.children;
