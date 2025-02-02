@@ -57,8 +57,6 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
   }
 
   render() {
-    if (this.props.status === 'error' || this.state.result == null)
-      return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
     if (this.props.status === 'loading')
       return (
         <img
@@ -67,6 +65,9 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
           className="text-center mt-[5rem] max-w-[15rem] mx-auto"
         />
       );
+
+    if (this.props.status === 'error' || this.state.result == null)
+      return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
 
     const cards = Array.isArray(this.state.result) ? (
       this.state.result.map(
