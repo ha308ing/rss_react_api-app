@@ -69,6 +69,10 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
     ) : (
       <PokemonCard pokemon={this.state.result} />
     );
-    return cards;
+    return (
+      <main className="flex flex-wrap basis-md justify-stretch items-stretch">
+        {cards}
+      </main>
+    );
   }
 }
