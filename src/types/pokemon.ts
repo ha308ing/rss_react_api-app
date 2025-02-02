@@ -14,9 +14,7 @@ export interface IPokemonApi {
   height: number;
   weight: number;
   sprites: {
-    front_default: {
-      image: string;
-    };
+    front_default: string;
   };
   stats: Array<{ base_stat: number; stat: { name: string; url: string } }>;
   types: Array<{ type: { name: string } }>;

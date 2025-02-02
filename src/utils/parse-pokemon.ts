@@ -6,9 +6,7 @@ export const parsePokemon = (result: IPokemonApi): IPokemon => {
     name,
     height,
     weight,
-    sprites: {
-      front_default: { image },
-    },
+    sprites: { front_default: image },
     stats,
     types,
   } = result;
