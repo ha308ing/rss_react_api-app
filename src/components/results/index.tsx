@@ -28,7 +28,7 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
 
     this.setState({ result: data });
 
-    if (data === null) {
+    if (data === null || (Array.isArray(data) && data.length === 0)) {
       this.props.changeStatus('error');
     } else {
       this.props.changeStatus(null);
@@ -57,7 +57,7 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
   }
 
   render() {
-    if (this.props.status === 'error')
+    if (this.props.status === 'error' || this.state.result == null)
       return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
     if (this.props.status === 'loading')
       return (
@@ -67,7 +67,6 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
           className="text-center mt-[5rem] max-w-[15rem] mx-auto"
         />
       );
-    if (this.state.result == null) return null;
 
     const cards = Array.isArray(this.state.result) ? (
       this.state.result.map(
