@@ -10,7 +10,6 @@ export class TopControls extends React.Component<
 > {
   changeInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    console.log({ newValue });
 
     this.props.changeSearchInput(newValue);
   };
