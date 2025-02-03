@@ -37,17 +37,10 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
 
   componentDidMount(): void {
     this.controllerRef.current = new AbortController();
-    this.loadResults();
   }
 
-  componentDidUpdate(prevProps: ResultsProps, prevState: ResultsState) {
-    if (
-      this.props.searchQuery !== prevProps.searchQuery ||
-      (this.state.result != null &&
-        prevState.result != null &&
-        Object.keys(this.state.result).length !==
-          Object.keys(prevState.result).length)
-    ) {
+  componentDidUpdate(prevProps: ResultsProps) {
+    if (this.props.searchQuery !== prevProps.searchQuery) {
       this.loadResults();
     }
   }

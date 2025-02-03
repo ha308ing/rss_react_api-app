@@ -20,7 +20,7 @@ export interface IAppStateExtended extends IAppState {
 export class App extends Component {
   state = {
     searchInput: '',
-    searchQuery: '',
+    searchQuery: null,
     status: null,
   };
 
@@ -40,9 +40,7 @@ export class App extends Component {
   changeSearchInput = this.changeState('searchInput');
 
   fillInputValueFromLocalStorage = () => {
-    const savedValue = localStorage.getItem('searchInputValue');
-
-    if (savedValue == null) return;
+    const savedValue = localStorage.getItem('searchInputValue') ?? '';
 
     this.changeSearchQuery(savedValue);
     this.changeSearchInput(savedValue);

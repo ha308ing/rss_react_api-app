@@ -62,7 +62,7 @@ class PokemonApi extends BaseApi {
       }
       updateCache(data);
     } catch (error) {
-      if (signal?.aborted) return [];
+      if (signal?.aborted) return null;
       console.error(error);
     }
     return data;
