@@ -6,7 +6,7 @@ import './app.css';
 export interface IAppState {
   status: null | 'loading' | 'error';
   searchInput: string;
-  searchQuery: string;
+  searchQuery: null | string;
 }
 
 type ChangeStateMethod<T, R = void> = (newValue: T) => R;

@@ -21,18 +21,19 @@ class PokemonApi extends BaseApi {
   };
 
   getPokemon = async (
-    searchQuery?: string | number,
+    searchQuery: string | null,
     signal?: AbortSignal
   ): Promise<null | IPokemon | (IPokemon | null)[]> => {
-    const cacheValue = getFromCache('' + searchQuery);
+    const searchQueryString = searchQuery ?? '';
+    const cacheValue = getFromCache('' + searchQueryString);
 
     if (cacheValue != null) return cacheValue;
 
     let data: null | IPokemon | (IPokemon | null)[] = null;
 
     try {
-      const requestQuery = searchQuery
-        ? '/' + searchQuery
+      const requestQuery = searchQueryString
+        ? '/' + searchQueryString
         : `?limit=${POKEMON_API.API_SEARCH_LIMIT}&offset=0`;
 
       const apiResponse = await this.genericRequest<
@@ -40,7 +41,7 @@ class PokemonApi extends BaseApi {
       >(requestQuery, signal);
 
       const isMultiple =
-        (searchQuery == '' || searchQuery == undefined) &&
+        (searchQueryString == '' || searchQueryString == undefined) &&
         isMultipleResponse(apiResponse);
 
       if (isMultiple) {
