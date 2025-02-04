@@ -1,48 +1,49 @@
 import { IAppStateExtended } from '@/app';
-import React, { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FC, FormEvent, useCallback } from 'react';
 
 const LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE = 'searchInputValue';
 const SEARCH_INPUT_PLACEHOLDER = 'Enter pokemon name';
 const SEARCH_BUTTON_TEXT = 'Search';
 
-export class TopControls extends React.Component<
-  Omit<IAppStateExtended, 'changeStatus'>
-> {
-  changeInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
+export const TopControls: FC<Omit<IAppStateExtended, 'changeStatus'>> = ({
+  changeSearchInput,
+  changeSearchQuery,
+  searchInput,
+  status,
+}) => {
+  const saveInputValueToLocalStorage = useCallback(() => {
+    localStorage.setItem(LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE, searchInput);
+  }, [searchInput]);
 
-    this.props.changeSearchInput(newValue);
-  };
+  const changeInputEventHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
 
-  buttonClickEventHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    this.props.changeSearchQuery(this.props.searchInput.trim());
-    this.saveInputValueToLocalStorage();
-  };
+      changeSearchInput(newValue);
+    },
+    [changeSearchInput]
+  );
 
-  saveInputValueToLocalStorage = () => {
-    localStorage.setItem(
-      LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE,
-      this.props.searchInput
-    );
-  };
+  const buttonClickEventHandler = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      changeSearchQuery(searchInput.trim());
+      saveInputValueToLocalStorage();
+    },
+    [changeSearchQuery, saveInputValueToLocalStorage, searchInput]
+  );
 
-  render() {
-    return (
-      <form
-        onSubmit={this.buttonClickEventHandler}
-        className="flex justify-center"
-      >
-        <input
-          className="p-2"
-          value={this.props.searchInput}
-          onChange={this.changeInputEventHandler}
-          placeholder={SEARCH_INPUT_PLACEHOLDER}
-        />
-        <button className="border-1 border-grey-50 px-4 py-2 rounded-sm hover:shadow-sm">
-          {this.props.status === 'loading' ? 'loading' : SEARCH_BUTTON_TEXT}
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={buttonClickEventHandler} className="flex justify-center">
+      <input
+        className="p-2"
+        value={searchInput}
+        onChange={changeInputEventHandler}
+        placeholder={SEARCH_INPUT_PLACEHOLDER}
+      />
+      <button className="border-1 border-grey-50 px-4 py-2 rounded-sm hover:shadow-sm">
+        {status === 'loading' ? 'loading' : SEARCH_BUTTON_TEXT}
+      </button>
+    </form>
+  );
+};
