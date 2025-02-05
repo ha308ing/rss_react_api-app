@@ -23,13 +23,13 @@ class PokemonApi extends BaseApi {
   getPokemon = async (
     searchQuery: string | null,
     signal?: AbortSignal
-  ): Promise<null | IPokemon | (IPokemon | null)[]> => {
+  ): Promise<null | IPokemon | IPokemon[]> => {
     const searchQueryString = searchQuery ?? '';
     const cacheValue = getFromCache('' + searchQueryString);
 
     if (cacheValue != null) return cacheValue;
 
-    let data: null | IPokemon | (IPokemon | null)[] = null;
+    let data: null | IPokemon | IPokemon[] = null;
 
     try {
       const requestQuery = searchQueryString
@@ -51,13 +51,15 @@ class PokemonApi extends BaseApi {
           )
         );
 
-        data = apiPromises.map((pokemonApiPromise) => {
-          if (pokemonApiPromise.status === 'fulfilled') {
-            return pokemonApiPromise.value as IPokemon;
-          } else {
-            return null;
-          }
-        });
+        data = apiPromises
+          .map((pokemonApiPromise) => {
+            if (pokemonApiPromise.status === 'fulfilled') {
+              return pokemonApiPromise.value as IPokemon;
+            } else {
+              return null;
+            }
+          })
+          .filter((result) => result) as IPokemon[];
       } else {
         data = parsePokemon(apiResponse as IPokemonApi);
       }
