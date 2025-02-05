@@ -1,36 +1,34 @@
-import { IAppStateExtended } from '@/app';
-import { ChangeEvent, FC, FormEvent, useCallback } from 'react';
+import { AppContext } from '@/contexts';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
-const LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE = 'searchInputValue';
 const SEARCH_INPUT_PLACEHOLDER = 'Enter pokemon name';
 const SEARCH_BUTTON_TEXT = 'Search';
 
-export const TopControls: FC<Omit<IAppStateExtended, 'changeStatus'>> = ({
-  changeSearchInput,
-  changeSearchQuery,
-  searchInput,
-  status,
-}) => {
-  const saveInputValueToLocalStorage = useCallback(() => {
-    localStorage.setItem(LOCALSTORAGE_KEY_SEARCH_INPUT_VALUE, searchInput);
-  }, [searchInput]);
+export const TopControls = () => {
+  const { searchQuery, status, setSearchQuery } = useContext(AppContext);
+  const [searchInput, setSearchInput] = useState<string>(() => searchQuery);
 
   const changeInputEventHandler = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
 
-      changeSearchInput(newValue);
+      setSearchInput(newValue);
     },
-    [changeSearchInput]
+    [setSearchInput]
   );
 
   const buttonClickEventHandler = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
+    (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      changeSearchQuery(searchInput.trim());
-      saveInputValueToLocalStorage();
+      setSearchQuery(searchInput.trim());
     },
-    [changeSearchQuery, saveInputValueToLocalStorage, searchInput]
+    [searchInput, setSearchQuery]
   );
 
   return (
