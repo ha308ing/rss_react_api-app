@@ -5,7 +5,7 @@ import { AppContext } from '@/contexts';
 export const Results = () => {
   const { status, pokemons } = useContext(AppContext);
 
-  if (status === 'loading' || pokemons === null)
+  if (status === 'loading' || status == null)
     return (
       <img
         src="./loader.gif"
@@ -17,16 +17,20 @@ export const Results = () => {
   if (status === 'error')
     return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
 
-  const cards = Array.isArray(pokemons) ? (
-    pokemons.map((pokemon) => (
-      <PokemonCard key={pokemon.id} pokemon={pokemon} />
-    ))
-  ) : (
-    <PokemonCard pokemon={pokemons} />
-  );
-  return (
-    <main className="flex flex-wrap basis-md justify-stretch items-stretch">
-      {cards}
-    </main>
-  );
+  if (pokemons != null) {
+    const cards = Array.isArray(pokemons) ? (
+      pokemons.map((pokemon) => (
+        <PokemonCard key={pokemon.id} pokemon={pokemon} />
+      ))
+    ) : (
+      <PokemonCard pokemon={pokemons} />
+    );
+    return (
+      <main className="flex flex-wrap basis-md justify-stretch items-stretch">
+        {cards}
+      </main>
+    );
+  }
+
+  return null;
 };
