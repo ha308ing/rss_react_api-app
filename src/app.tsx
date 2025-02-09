@@ -1,11 +1,12 @@
-import { Results, TopControls, ErrorButton } from '@/components';
+import { Results, TopControls, ErrorButton, Pagination } from '@/components';
 import { usePokemons, useLocalStorage } from '@/hooks';
 import { AppContext } from '@/contexts';
 import './app.css';
 
 export const App = () => {
   const [searchQuery, setSearchQuery] = useLocalStorage();
-  const [pokemons, status] = usePokemons(searchQuery);
+  const [pokemons, status, page, nextHandler, prevHandler] =
+    usePokemons(searchQuery);
 
   return (
     <AppContext.Provider
@@ -15,6 +16,14 @@ export const App = () => {
         <h1 className="text-[3rem] m-4 font-bold text-center">API App</h1>
         <ErrorButton />
         <TopControls />
+        {searchQuery == null ||
+          (searchQuery == '' && (
+            <Pagination
+              prevHandler={prevHandler}
+              nextHandler={nextHandler}
+              page={page}
+            />
+          ))}
         <Results />
       </section>
     </AppContext.Provider>
