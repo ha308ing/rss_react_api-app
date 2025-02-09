@@ -1,26 +1,31 @@
 import { pokemonApi } from '@/services';
 import { IPokemon } from '@/types';
 import { useEffect, useState } from 'react';
+import { usePagination } from './usePagination';
 
 export const usePokemons = (searchQuery: string) => {
   const [status, setStatus] = useState<null | 'loading' | 'error' | 'success'>(
     null
   );
   const [pokemons, setPokemons] = useState<IPokemon | IPokemon[] | null>(null);
+  const [page, offset, nextHandler, prevHandler] = usePagination();
 
   useEffect(() => {
     const controller = new AbortController();
     const loadResults = async () => {
       setStatus('loading');
 
-      const data = await pokemonApi.getPokemon(searchQuery, controller.signal);
-
-      setPokemons(data);
+      const data = await pokemonApi.getPokemon(
+        searchQuery,
+        offset,
+        controller.signal
+      );
 
       if (data === null) {
         setStatus('error');
-      } else {
+      } else if (data !== undefined) {
         setStatus('success');
+        setPokemons(data);
       }
     };
 
@@ -29,7 +34,7 @@ export const usePokemons = (searchQuery: string) => {
     return () => {
       controller.abort();
     };
-  }, [searchQuery]);
+  }, [searchQuery, offset]);
 
-  return [pokemons, status] as const;
+  return [pokemons, status, page, nextHandler, prevHandler] as const;
 };
