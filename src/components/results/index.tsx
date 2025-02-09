@@ -1,9 +1,16 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { PokemonCard } from '@/components';
 import { AppContext } from '@/contexts';
 
 export const Results = () => {
-  const { status, pokemons } = useContext(AppContext);
+  const { status, pokemons, setPokemonDetails } = useContext(AppContext);
+
+  const setPokemonDetails_ = useCallback(
+    (pokemonName: string) => () => {
+      setPokemonDetails(pokemonName);
+    },
+    [setPokemonDetails]
+  );
 
   if (status === 'loading' || status == null)
     return (
@@ -20,10 +27,17 @@ export const Results = () => {
   if (pokemons != null) {
     const cards = Array.isArray(pokemons) ? (
       pokemons.map((pokemon) => (
-        <PokemonCard key={pokemon.id} pokemon={pokemon} />
+        <PokemonCard
+          key={pokemon.id}
+          pokemon={pokemon}
+          clickHandler={setPokemonDetails_(pokemon.name)}
+        />
       ))
     ) : (
-      <PokemonCard pokemon={pokemons} />
+      <PokemonCard
+        pokemon={pokemons}
+        clickHandler={setPokemonDetails_(pokemons.name)}
+      />
     );
     return (
       <main className="flex flex-wrap basis-md justify-stretch items-stretch">
