@@ -16,11 +16,17 @@ export const usePagination = () => {
   const offset = useMemo(() => (page - 1) * API_LIMIT, [page]);
 
   const nextHandler = useCallback(() => {
-    setSearchParams({ [PAGE_SEARCH_PARAM]: page + 1 + '' });
+    setSearchParams((prev) => {
+      prev.set(PAGE_SEARCH_PARAM, page + 1 + '');
+      return prev;
+    });
   }, [page, setSearchParams]);
 
   const prevHandler = useCallback(() => {
-    setSearchParams({ [PAGE_SEARCH_PARAM]: page - 1 + '' });
+    setSearchParams((prev) => {
+      prev.set(PAGE_SEARCH_PARAM, page - 1 + '');
+      return prev;
+    });
   }, [page, setSearchParams]);
 
   return [page, offset, nextHandler, prevHandler] as const;
