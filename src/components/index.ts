@@ -5,3 +5,4 @@ export { ErrorBoundary } from './error-boundary';
 export { ErrorButton } from './error-button';
 export { Pagination } from './pagination';
 export { Page404 } from './page404';
+export { PokemonDetails } from './pokemon-details';
