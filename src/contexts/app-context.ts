@@ -6,6 +6,9 @@ interface IAppContext {
   status: null | 'loading' | 'error' | 'success';
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
+  setPokemonDetails: (pokemonName: string) => void;
+  pokemonDetails: string | null;
+  closePokemonDetails: () => void;
 }
 
 const defaultAppContext: IAppContext = {
@@ -13,6 +16,9 @@ const defaultAppContext: IAppContext = {
   status: null,
   searchQuery: '',
   setSearchQuery: () => {},
+  setPokemonDetails: () => {},
+  pokemonDetails: null,
+  closePokemonDetails: () => {},
 };
 
 export const AppContext = createContext<IAppContext>(defaultAppContext);
