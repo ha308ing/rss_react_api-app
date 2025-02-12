@@ -38,8 +38,12 @@ export const TopControls = () => {
         value={searchInput}
         onChange={changeInputEventHandler}
         placeholder={SEARCH_INPUT_PLACEHOLDER}
+        data-testid="search-input"
       />
-      <button className="border-1 border-grey-50 px-4 py-2 rounded-sm hover:shadow-sm">
+      <button
+        className="border-1 border-grey-50 px-4 py-2 rounded-sm hover:shadow-sm"
+        data-testid="search-button"
+      >
         {status === 'loading' ? 'loading' : SEARCH_BUTTON_TEXT}
       </button>
     </form>
