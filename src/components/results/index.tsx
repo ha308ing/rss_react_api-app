@@ -1,74 +1,43 @@
-import { IAppStateExtended } from '@/app';
-import { pokemonApi } from '@/services';
-import React from 'react';
+import { useCallback, useContext } from 'react';
 import { PokemonCard } from '@/components';
-import { IPokemon } from '@/types';
+import { AppContext } from '@/contexts';
 
-type ResultsProps = Pick<
-  IAppStateExtended,
-  'changeStatus' | 'searchQuery' | 'status'
->;
+export const Results = () => {
+  const { status, pokemons, setPokemonDetails } = useContext(AppContext);
 
-type ResultsState = { result: IPokemon | (IPokemon | null)[] | null };
+  const setPokemonDetails_ = useCallback(
+    (pokemonName: string) => () => {
+      setPokemonDetails(pokemonName);
+    },
+    [setPokemonDetails]
+  );
 
-export class Results extends React.PureComponent<ResultsProps, ResultsState> {
-  controllerRef = React.createRef<AbortController>();
-
-  state: ResultsState = {
-    result: null,
-  };
-
-  loadResults = async () => {
-    this.props.changeStatus('loading');
-
-    const data = await pokemonApi.getPokemon(
-      this.props.searchQuery,
-      this.controllerRef?.current?.signal
+  if (status === 'loading' || status == null)
+    return (
+      <img
+        src="./loader.gif"
+        alt="Loading pokemons"
+        className="text-center mt-[5rem] max-w-[15rem] mx-auto"
+      />
     );
 
-    this.setState({ result: data });
+  if (status === 'error')
+    return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
 
-    if (data === null || (Array.isArray(data) && data.length === 0)) {
-      this.props.changeStatus('error');
-    } else {
-      this.props.changeStatus(null);
-    }
-  };
-
-  componentDidMount(): void {
-    this.controllerRef.current = new AbortController();
-  }
-
-  componentDidUpdate(prevProps: ResultsProps) {
-    if (this.props.searchQuery !== prevProps.searchQuery) {
-      this.loadResults();
-    }
-  }
-
-  componentWillUnmount(): void {
-    this.controllerRef?.current?.abort();
-  }
-
-  render() {
-    if (this.props.status === 'loading')
-      return (
-        <img
-          src="./loader.gif"
-          alt="Loading pokemons"
-          className="text-center mt-[5rem] max-w-[15rem] mx-auto"
+  if (pokemons != null) {
+    const cards = Array.isArray(pokemons) ? (
+      pokemons.map((pokemon) => (
+        <PokemonCard
+          key={pokemon.id}
+          pokemon={pokemon}
+          clickHandler={setPokemonDetails_(pokemon.name)}
         />
-      );
-
-    if (this.props.status === 'error' || this.state.result == null)
-      return <h1 className="text-center mt-[5rem]">Failed to get pokemon</h1>;
-
-    const cards = Array.isArray(this.state.result) ? (
-      this.state.result.map(
-        (pokemon) =>
-          pokemon && <PokemonCard key={pokemon.id} pokemon={pokemon} />
-      )
+      ))
     ) : (
-      <PokemonCard pokemon={this.state.result} />
+      <PokemonCard
+        pokemon={pokemons}
+        clickHandler={setPokemonDetails_(pokemons.name)}
+      />
     );
     return (
       <main className="flex flex-wrap basis-md justify-stretch items-stretch">
@@ -76,4 +45,6 @@ export class Results extends React.PureComponent<ResultsProps, ResultsState> {
       </main>
     );
   }
-}
+
+  return null;
+};

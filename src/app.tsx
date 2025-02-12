@@ -1,73 +1,43 @@
-import { Component } from 'react';
-import { Results, TopControls } from '@/components';
-import { ErrorButton } from './components/error-button';
+import { Results, TopControls, ErrorButton, Pagination } from '@/components';
+import { usePokemons, useLocalStorage, useDetails } from '@/hooks';
+import { AppContext } from '@/contexts';
 import './app.css';
+import { Outlet } from 'react-router';
 
-export interface IAppState {
-  status: null | 'loading' | 'error';
-  searchInput: string;
-  searchQuery: null | string;
-}
+export const App = () => {
+  const [searchQuery, setSearchQuery] = useLocalStorage();
+  const [pokemons, status, page, nextHandler, prevHandler] =
+    usePokemons(searchQuery);
+  const { pokemonDetails, setPokemonDetails, closePokemonDetails } =
+    useDetails();
 
-type ChangeStateMethod<T, R = void> = (newValue: T) => R;
-
-export interface IAppStateExtended extends IAppState {
-  changeStatus: ChangeStateMethod<IAppState['status']>;
-  changeSearchQuery: ChangeStateMethod<IAppState['searchQuery']>;
-  changeSearchInput: ChangeStateMethod<IAppState['searchInput']>;
-}
-
-export class App extends Component {
-  state = {
-    searchInput: '',
-    searchQuery: null,
-    status: null,
-  };
-
-  changeState =
-    (field: keyof typeof this.state) =>
-    (newValue: (typeof this.state)[typeof field]) => {
-      this.setState((s) => ({
-        ...s,
-        [field]: newValue,
-      }));
-    };
-
-  changeSearchQuery = this.changeState('searchQuery');
-
-  changeStatus = this.changeState('status');
-
-  changeSearchInput = this.changeState('searchInput');
-
-  fillInputValueFromLocalStorage = () => {
-    const savedValue = localStorage.getItem('searchInputValue') ?? '';
-
-    this.changeSearchQuery(savedValue);
-    this.changeSearchInput(savedValue);
-  };
-
-  componentDidMount(): void {
-    this.fillInputValueFromLocalStorage();
-  }
-
-  render() {
-    return (
+  return (
+    <AppContext.Provider
+      value={{
+        pokemons,
+        status,
+        searchQuery,
+        setSearchQuery,
+        setPokemonDetails,
+        pokemonDetails,
+        closePokemonDetails,
+      }}
+    >
       <section className="max-w-xl mx-auto">
         <h1 className="text-[3rem] m-4 font-bold text-center">API App</h1>
         <ErrorButton />
-        <TopControls
-          searchQuery={this.state.searchQuery}
-          changeSearchQuery={this.changeSearchQuery}
-          status={this.state.status}
-          searchInput={this.state.searchInput}
-          changeSearchInput={this.changeSearchInput}
-        />
-        <Results
-          changeStatus={this.changeStatus}
-          searchQuery={this.state.searchQuery}
-          status={this.state.status}
-        />
+        <TopControls />
+        {searchQuery == null ||
+          (searchQuery == '' && (
+            <Pagination
+              prevHandler={prevHandler}
+              nextHandler={nextHandler}
+              page={page}
+            />
+          ))}
+        <Results />
       </section>
-    );
-  }
-}
+      <Outlet />
+    </AppContext.Provider>
+  );
+};

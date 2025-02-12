@@ -1,24 +1,22 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
-export class ErrorButton extends React.Component {
-  state = {
-    hasError: false,
+export const ErrorButton = () => {
+  const [hasError, setHasError] = useState(false);
+
+  const clickHandler = () => {
+    setHasError(true);
   };
 
-  clickHandler = () => {
-    this.setState({ hasError: true });
-  };
+  useEffect(() => {
+    if (hasError) throw new Error('Trigger error button');
+  }, [hasError]);
 
-  render() {
-    if (this.state.hasError) throw new Error('Trigger error button');
-
-    return (
-      <button
-        onClick={this.clickHandler}
-        className="text-sm bg-red-800 text-red-50 py-2 px-4 fixed bottom-3 right-4"
-      >
-        Throw Error
-      </button>
-    );
-  }
-}
+  return (
+    <button
+      onClick={clickHandler}
+      className="text-sm bg-red-800 text-red-50 py-2 px-4 fixed bottom-3 right-4"
+    >
+      Throw Error
+    </button>
+  );
+};
