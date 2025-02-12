@@ -34,23 +34,24 @@ export const PokemonDetails = () => {
     };
   }, [closePokemonDetails, pokemonDetails]);
 
-  if (pokemonDetails == null) return null;
+  const content =
+    pokemonDetails == null ? (
+      <h1>where is pokemon?</h1>
+    ) : pokemons ? (
+      <PokemonCard pokemon={pokemons as IPokemon} size="big" />
+    ) : (
+      <h1>Loading...</h1>
+    );
 
   return (
     <aside
       ref={cardRef}
       className="fixed top-[25%] bottom-[25%] left-0 right-0 md:left-[50%] border-1 border-gray-300 rounded-2xl bg-white shadow-2xl p-2 flex items-center justify-center"
     >
-      {pokemons ? (
-        <>
-          <PokemonCard pokemon={pokemons as IPokemon} size="big" />
-          <button className="absolute top-5 right-5" ref={closeButtonRef}>
-            Close
-          </button>
-        </>
-      ) : (
-        <h1>where is pokemon?</h1>
-      )}
+      {content}
+      <button className="absolute top-5 right-5" ref={closeButtonRef}>
+        Close
+      </button>
     </aside>
   );
 };

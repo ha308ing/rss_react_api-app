@@ -1,29 +1,33 @@
 import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
+
+const getUrlWithParams = (url: string, searchParams: URLSearchParams) =>
+  url +
+  '?' +
+  Array.from(searchParams.entries()).reduce((s, [k, v]) => {
+    s += `${k}=${encodeURIComponent(v)}`;
+    return s;
+  }, '');
 
 export const useDetails = () => {
-  const [details, setSearchParams] = useSearchParams();
   const [pokemonDetails, setPokemonDetails_] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const setPokemonDetails = useCallback(
     (pokemonName: string) => {
-      setSearchParams((previous) => {
-        previous.set('details', '1');
-        return previous;
-      });
-
       setPokemonDetails_(pokemonName);
+      const url = getUrlWithParams('/details', searchParams);
+      navigate(url);
     },
-    [setSearchParams]
+    [navigate, searchParams]
   );
 
   const closePokemonDetails = useCallback(() => {
-    setSearchParams((prev) => {
-      prev.delete('details');
-      return prev;
-    });
     setPokemonDetails_(null);
-  }, [setSearchParams]);
+    const url = getUrlWithParams('/', searchParams);
+    navigate(url);
+  }, [navigate, searchParams]);
 
-  return { details, pokemonDetails, setPokemonDetails, closePokemonDetails };
+  return { pokemonDetails, setPokemonDetails, closePokemonDetails };
 };

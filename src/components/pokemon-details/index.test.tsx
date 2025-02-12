@@ -69,10 +69,12 @@ describe('tests pokemon details component', () => {
     expect(providerProps.closePokemonDetails).toBeCalled();
   });
 
-  test('should render message if no pokemon was found', async () => {
+  test('should render message if no pokemon is set', async () => {
     mocks.usePokemons.mockReturnValue([null]);
 
-    customRender(<PokemonDetails />, { providerProps });
+    customRender(<PokemonDetails />, {
+      providerProps: { ...providerProps, pokemonDetails: null },
+    });
 
     const message = screen.getByText(/where is pokemon/i);
 

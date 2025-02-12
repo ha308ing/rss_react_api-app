@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from '@/app';
-import { ErrorBoundary, Page404 } from '@/components';
+import { ErrorBoundary, Page404, PokemonDetails } from '@/components';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
 (() => {
@@ -14,7 +14,9 @@ import { BrowserRouter, Route, Routes } from 'react-router';
       <ErrorBoundary>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<App />} />
+            <Route path="/" element={<App />}>
+              <Route path="/details" element={<PokemonDetails />} />
+            </Route>
             <Route path="*" element={<Page404 />} />
           </Routes>
         </BrowserRouter>

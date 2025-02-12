@@ -1,13 +1,8 @@
-import {
-  Results,
-  TopControls,
-  ErrorButton,
-  Pagination,
-  PokemonDetails,
-} from '@/components';
+import { Results, TopControls, ErrorButton, Pagination } from '@/components';
 import { usePokemons, useLocalStorage, useDetails } from '@/hooks';
 import { AppContext } from '@/contexts';
 import './app.css';
+import { Outlet } from 'react-router';
 
 export const App = () => {
   const [searchQuery, setSearchQuery] = useLocalStorage();
@@ -42,7 +37,7 @@ export const App = () => {
           ))}
         <Results />
       </section>
-      {pokemonDetails && <PokemonDetails />}
+      <Outlet />
     </AppContext.Provider>
   );
 };
