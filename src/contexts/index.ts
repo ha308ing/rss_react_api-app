@@ -1,1 +1,1 @@
-export { AppContext } from './app-context';
+export { AppContext, type IAppContext } from './app-context';

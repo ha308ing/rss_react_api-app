@@ -1,7 +1,7 @@
 import { IPokemon } from '@/types';
 import { createContext, Dispatch, SetStateAction } from 'react';
 
-interface IAppContext {
+export interface IAppContext {
   pokemons: null | IPokemon | IPokemon[];
   status: null | 'loading' | 'error' | 'success';
   searchQuery: string;
